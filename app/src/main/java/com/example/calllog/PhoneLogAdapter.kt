@@ -1,59 +1,37 @@
-package com.example.calllog;
+package com.example.calllog
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.TextView;
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
-public class PhoneLogAdapter extends RecyclerView.Adapter<PhoneLogAdapter.ViewHolder> {
-    private List<Call> mData;
-    private LayoutInflater mInflater;
-
-    PhoneLogAdapter(Context context, List<Call> data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+class PhoneLogAdapter internal constructor(context: Context?, data: List<Call>) :
+    RecyclerView.Adapter<PhoneLogAdapter.ViewHolder>() {
+    private val mData: List<Call> = data
+    private val mInflater: LayoutInflater = LayoutInflater.from(context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = mInflater.inflate(R.layout.call_history_item, parent, false)
+        return ViewHolder(view)
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.call_history_item, parent, false);
-        return new ViewHolder(view);
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val call = mData[position]
+        holder.numberTextView.text = call.number
+        holder.durationTextView.text = call.duration
+        holder.typeTextView.text = call.type
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull PhoneLogAdapter.ViewHolder holder, int position) {
-        Call call = mData.get(position);
+    override fun getItemCount(): Int {
+        return mData.size
+    }
 
-        holder.numberTextView.setText(call.getNumber());
-        holder.durationTextView.setText(call.getDuration());
-        holder.typeTextView.setText(call.getType());
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var numberTextView: TextView = view.findViewById(R.id.tvNumber)
+        var durationTextView: TextView = view.findViewById(R.id.tvDuration)
+        var typeTextView: TextView = view.findViewById(R.id.tvItem)
 
     }
 
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView numberTextView;
-        TextView durationTextView;
-        TextView typeTextView;
-
-        public ViewHolder(View view) {
-            super(view);
-            numberTextView = view.findViewById(R.id.tvNumber);
-            durationTextView = view.findViewById(R.id.tvDuration);
-            typeTextView = view.findViewById(R.id.tvItem);
-        }
-
-    }
 }
