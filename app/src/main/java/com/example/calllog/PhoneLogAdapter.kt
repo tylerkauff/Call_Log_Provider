@@ -19,8 +19,18 @@ class PhoneLogAdapter internal constructor(context: Context?, data: List<Call>) 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val call = mData[position]
         holder.numberTextView.text = call.number
-        holder.durationTextView.text = call.duration
-        holder.typeTextView.text = call.type
+        val durationFormat = call.duration + " seconds"
+        holder.durationTextView.text = durationFormat
+
+        val typeString: String = when (call.type) {
+            "0" -> "Declined"
+            "1" -> "Incoming"
+            "2" -> "Outgoing"
+            "3" -> "Missed"
+            else -> { "Declined" }
+        }
+
+        holder.typeTextView.text = typeString
     }
 
     override fun getItemCount(): Int {
